@@ -1,3 +1,29 @@
+Enjoy folks, example:
+
+```
+if __name__ == '__main__':
+    intz = Intezer('xxx')
+    resp = intz.analyze_file_by_path('test.exe')
+
+    for x in resp:
+        pprint(x.metadata())
+        pprint(x.account_related_samples())
+        try:
+            cr = x.code_reuse()
+            pprint(cr)
+        except RuntimeError as e:
+            if str(e) == 'Resource conflict':
+                print('No code for sub-analysis, skipping vaccine generation')
+                continue
+        for y in cr['families']:
+            rf = x.related_family_files(y['family_id'])
+            pprint(rf)
+        pprint(x.vaccine())
+```
+
+Output:
+
+```
 user@host:~/CodeProjects/Intezer-v2$ ./intezer.py 
 {'architecture': 'i386',
  'compilation_timestamp': '2007:10:29 06:17:05+00:00',
@@ -454,4 +480,4 @@ Fetching vaccine with: c2b37751-4ef9-4859-a426-5813a792904e - 9f6b7bf9-6432-4c22
            '\t\t75 of them\n'
            '}',
  'result_url': '/analyses/c2b37751-4ef9-4859-a426-5813a792904e/sub-analyses/9f6b7bf9-6432-4c22-9966-8c8885c199ac/vaccines/yara',
- 'status': 'succeeded'}
+ 'status': 'succeeded'}```
